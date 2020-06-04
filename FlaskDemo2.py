@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 server = Flask(__name__)
+
 class Person():
 
     name = None
@@ -26,6 +27,24 @@ def temp():
     per.name = '漩涡名人'
     uname = 'uzuinko klsownc'
     return render_template('01_temp.html',params=locals())
+
+@server.route('/request')
+def request_views():
+    scheme = request.scheme
+    method = request.method
+    args = request.args
+    form = request.form
+    values = request.values
+    cookies = request.cookies
+    path = request.path
+    headers = request.headers
+
+    ua = headers['User-Agent']
+
+    #referer = request.headers['referer']
+    referer = request.headers.get('referer','')
+
+    return render_template('02_request.html',params=locals())
 
 @server.route('/login')
 def login():

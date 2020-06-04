@@ -1,0 +1,22 @@
+from flask import request
+在Flask中，请求信息被封装到request对象中
+
+request的成员(常用)：
+
+    scheme:获取请求方案(协议)
+
+    method:获取本次请求的请求方式
+
+    request.args:获取使用get请求方式提交的数据
+
+    request.form:获取使用post请求方式提交的数据
+
+    request.values:获取get和post请求方式提交的数据(get和post通用)
+
+    request.cookies:获取cookies中的信息
+
+    request.headers:获取请求信息头的信息
+
+    request.path:获取请求的url地址
+
+    request.files:获取用户上传的文件
