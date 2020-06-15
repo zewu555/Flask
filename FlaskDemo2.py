@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect,url_for
+from werkzeug.routing import BaseConverter
 
 server = Flask(__name__)
 
@@ -48,7 +49,43 @@ def request_views():
 
 @server.route('/login')
 def login():
-    return '这里是登录页面'
+    url = url_for('request_views')
+    return redirect(url)
+
+@server.route('/h1')
+@server.route('/h2')
+def hello():
+    return 'hello 1'
+
+@server.route('/user/<int:user_id>')
+def user(user_id):
+
+    return 'user detail page %s' %user_id
+
+#定义自己的转换器
+class MobileConverter(BaseConverter):
+
+    def __init__(self,url_map):
+        super().__init__(url_map)
+        self.regex = '1[34578]\d{9}'
+
+
+#定义自己的转换器
+class RegexConverter(BaseConverter):
+
+    def __init__(self,url_map,regex):
+        #调用父类的初始化方法
+        super().__init__(url_map)
+        #将正则表达式的参数保存到对象的属性中，flask会去使用这个属性来进行路由的正则匹配
+        self.regex = regex
+
+#将自定义的转换器添加到flask的应用中
+server.url_map.converters['re'] = RegexConverter
+
+@server.route("/send/<re('1[34578]\d{9}'):mobile>")
+def send_smg(mobile):
+    return 'send smg to %s' %mobile
+
 
 if __name__ == '__main__':
     server.run(debug=True)
